@@ -1,0 +1,77 @@
+/* universal */
+
+html {
+  background-color: #ffffff;
+}
+body {
+  min-width: 1200px;
+}
+a {
+  color:#666;
+  text-decoration:none;
+}
+a:hover {
+  color:#FF4401;
+}
+a:active,a:focus {
+  outline:0;
+}
+a.active {
+  color: #FF4401;
+}
+.f-wrap {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+/* layout.user header */
+
+.header{
+  width: 100%;
+  height: 80px;
+  line-height: 80px;
+  font-size: 0;
+}
+
+.header .brand{
+  display: inline-block;
+  margin-right: 14px;
+  width: 88px;
+  height: 44px;
+  vertical-align: middle;
+  background: url("../images/brand/logo.svg") no-repeat center center;
+}
+.header h3{
+  display: inline-block;
+  padding-left: 14px;
+  font-size: 18px;
+  color: #919191;
+  height: 24px;
+  line-height: 24px;
+  vertical-align: middle;
+  border-left: 1px solid #919191;
+}
+
+/* layout.user footer */
+.footer{
+  width: 100%;
+  height: 100px;
+  padding-top: 40px;
+  text-align: center;
+  color: #666666;
+}
+.footer a{
+  padding: 0 5px;
+  color:#666666;
+}
+.footer a:hover {
+  color:#333333;
+  text-decoration: underline;
+}
+.footer a.active {
+  color: #666666;
+}
+.footer .copyright{
+  margin-top: 5px;
+  color: #666666;
+}
