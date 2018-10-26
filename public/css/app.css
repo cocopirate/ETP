@@ -376,6 +376,39 @@ a.active {
   margin: 0 auto;
 }
 
+input[type=text]:focus,
+input[type=tel]:focus,
+input[type=password]:focus {
+  border-color: #80bdff;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+          box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+}
+
+/* Checkbox */
+
+.checkbox-wrap {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkbox-wrap span {
+  margin: 0 2px;
+}
+
+/* Button */
+
+.btn {
+  color: #ffffff;
+  background-color: #FF4401;
+  border-radius: 3px;
+  outline: none;
+  border: 0;
+}
+
 /* layout.user header */
 
 .header {
@@ -403,6 +436,13 @@ a.active {
   line-height: 24px;
   vertical-align: middle;
   border-left: 1px solid #919191;
+}
+
+/* layout.user container */
+
+.container {
+  position: relative;
+  width: 100%;
 }
 
 /* layout.user footer */

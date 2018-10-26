@@ -87,5 +87,5 @@ return [
 	*/
 	'server_fail_alert' => '验证码校验失败',
 
-
+    'width' => '292px',
 ];
