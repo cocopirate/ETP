@@ -1,77 +1,6 @@
 @extends('layouts.user')
 
 @section('content')
-    <div class="f-wrap">
-        <div class="reg-wrap f-cb">
-            <div class="reg-form f-fl">
-                <h3 class="reg-title">请填写账号注册信息</h3>
-                <form method="POST" action="{{ route('register') }}">
-                    {{ csrf_field() }}
-
-                    <div class="reg-item f-cb">
-                        <div class="item-title f-fl"><span>*</span> 登录账号</div>
-                        <div class="item-input f-fl">
-                            @if ($errors->has('username'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('username') }}</strong>
-                                </span>
-                            @endif
-                            <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus/>
-                            <p>6~18个字符，可使用字母、数字、下划线，需以字母开头</p>
-                        </div>
-                    </div>
-                    <div class="reg-item f-cb">
-                        <div class="item-title f-fl"><span>*</span> 登录密码</div>
-                        <div class="item-input f-fl">
-                            @if ($errors->has('password'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif
-                            <input id="password" type="password" name="password" required/>
-                            <p>6~16个字符，区分大小写</p>
-                        </div>
-                    </div>
-                    <div class="reg-item f-cb">
-                        <div class="item-title f-fl"><span>*</span> 密码确认</div>
-                        <div class="item-input f-fl">
-                            <input id="password-confirm" type="password" name="password_confirmation" required/>
-                            <p>请再次填写密码</p>
-                        </div>
-                    </div>
-                    <div class="reg-item f-cb">
-                        <div class="item-title f-fl"><span>*</span> 手机号码</div>
-                        <div class="item-input f-fl">
-                            <input id="tel" type="tel" name="tel"/>
-                            <p>忘记密码时，可以通过该手机号码快速找回密码</p>
-                        </div>
-                    </div>
-                    <div class="reg-item">
-                        <!-- {!! Geetest::render('float', 'reg_verification') !!} -->
-                    </div>
-                    <div class="reg-item f-cb">
-                        <div class="item-title f-fl"><span>*</span> 短信验证</div>
-                        <div class="item-input f-fl">
-                            <input id="SMScode" class="verification-input" type="text" name="SMScode" />
-                            <button class="btn-verification">获取短信验证码</button>
-                            <p>请查收手机短信，并填写短信中的验证码</p>
-                        </div>
-                    </div>
-                    <div class="reg-item">
-                            <span class="checkbox-wrap">
-                                <input type="checkbox" required/>
-                                <span>阅读并同意<a href="#" target="_blank">《蚂蚁海淘服务协议》</a>和<a href="#" target="_blank">《隐私权相关政策》</a></span>
-                            </span>
-                    </div>
-                    <div class="reg-item">
-                        <button type="submit" class="btn btn-reg">同意协议并注册</button>
-                    </div>
-                </form>
-                <div class="login-link">已有账号？<a href="{{ route('login') }}">立即登录</a></div>
-            </div>
-            <div class="reg-banner f-fr"></div>
-        </div>
-    </div>
     <style type="text/css">
         /* Register*/
         .reg-wrap{
@@ -190,4 +119,71 @@
             color: #FF4401;
         }
     </style>
+    <div class="f-wrap">
+        <div class="reg-wrap f-cb">
+            <div class="reg-form f-fl">
+                <h3 class="reg-title">请填写账号注册信息</h3>
+                <form method="POST" action="{{ route('register') }}">
+                    {{ csrf_field() }}
+
+
+                    <div class="reg-item f-cb">
+                        <div class="item-title f-fl"><span>*</span> 登录账号</div>
+                        <div class="item-input f-fl">
+                            <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus/>
+                            <p>6~18个字符，可使用字母、数字、下划线，需以字母开头</p>
+                        </div>
+                    </div>
+                    <div class="reg-item f-cb">
+                        <div class="item-title f-fl"><span>*</span> 登录密码</div>
+                        <div class="item-input f-fl">
+                            @if ($errors->has('password'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                </span>
+                            @endif
+                            <input id="password" type="password" name="password" required/>
+                            <p>6~16个字符，区分大小写</p>
+                        </div>
+                    </div>
+                    <div class="reg-item f-cb">
+                        <div class="item-title f-fl"><span>*</span> 密码确认</div>
+                        <div class="item-input f-fl">
+                            <input id="password-confirm" type="password" name="password_confirmation" required/>
+                            <p>请再次填写密码</p>
+                        </div>
+                    </div>
+                    <div class="reg-item f-cb">
+                        <div class="item-title f-fl"><span>*</span> 手机号码</div>
+                        <div class="item-input f-fl">
+                            <input id="tel" type="tel" name="tel"/>
+                            <p>忘记密码时，可以通过该手机号码快速找回密码</p>
+                        </div>
+                    </div>
+                    <div class="reg-item">
+                        <!-- {!! Geetest::render('float', 'reg_verification') !!} -->
+                    </div>
+                    <div class="reg-item f-cb">
+                        <div class="item-title f-fl"><span>*</span> 短信验证</div>
+                        <div class="item-input f-fl">
+                            <input id="SMScode" class="verification-input" type="text" name="SMScode" />
+                            <button class="btn-verification">获取短信验证码</button>
+                            <p>请查收手机短信，并填写短信中的验证码</p>
+                        </div>
+                    </div>
+                    <div class="reg-item">
+                            <span class="checkbox-wrap">
+                                <input type="checkbox" required/>
+                                <span>阅读并同意<a href="#" target="_blank">《蚂蚁海淘服务协议》</a>和<a href="#" target="_blank">《隐私权相关政策》</a></span>
+                            </span>
+                    </div>
+                    <div class="reg-item">
+                        <button type="submit" class="btn btn-reg">同意协议并注册</button>
+                    </div>
+                </form>
+                <div class="login-link">已有账号？<a href="{{ route('login') }}">立即登录</a></div>
+            </div>
+            <div class="reg-banner f-fr"></div>
+        </div>
+    </div>
 @endsection
