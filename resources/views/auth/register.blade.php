@@ -126,7 +126,6 @@
                 <form method="POST" action="{{ route('register') }}">
                     {{ csrf_field() }}
 
-
                     <div class="reg-item f-cb">
                         <div class="item-title f-fl"><span>*</span> 登录账号</div>
                         <div class="item-input f-fl">

@@ -12,8 +12,8 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
-<script src="https://static.geetest.com/static/tools/gt.js"></script>
+<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://static.geetest.com/static/tools/gt.js"></script>
 <script>
     var geetest = function(url) {
         var handlerEmbed = function(captchaObj) {

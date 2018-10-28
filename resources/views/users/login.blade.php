@@ -306,8 +306,8 @@
                                 {!! Geetest::render('float', 'pwd-verification') !!}
                                 <div class="login-other-info">
                               <span class="checkbox-wrap">
-                                <input type="checkbox" name="remember"/>
-                                <span class="checkbox-text">一周内自动登录</span>
+                                <input type="checkbox"/>
+                                <span class="checkbox-text">两周内自动登录</span>
                               </span>
                                     <a href="#">忘记密码</a>
                                 </div>
