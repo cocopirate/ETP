@@ -125,6 +125,8 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+    'sms_limit_time' => env('SMS_LIMIT_TIME', '60'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -179,6 +181,8 @@ return [
 
         // Geetest
         Germey\Geetest\GeetestServiceProvider::class,
+        // EasySMS
+        App\Providers\EasySmsServiceProvider::class,
     ],
 
     /*

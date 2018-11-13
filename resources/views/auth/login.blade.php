@@ -284,10 +284,9 @@
                         <div class="tabs-panel tabs-panel-active login-password-panel">
                             <form method="POST" action="{{ route('login') }}">
                                 {{ csrf_field() }}
-
+                                <!-- 待优化，前端校验输入内容 -->
                                 <!-- 错误提示 -->
                                 @if (count($errors) > 0)
-                                    <script></script>
                                     <div class="tips-danger">
                                         <img src="{{ URL::asset('fonts/icon_wrong.svg') }}" alt="">
                                         <span>{{ $errors->first()}}</span>

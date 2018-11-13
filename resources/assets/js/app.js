@@ -21,7 +21,7 @@ $(document).ready(function(){
     // 支持checkbox文字选中
     $(".checkbox-text").click(function () {
         var checkbox = $(this).prev("input");
-        checkbox.prop('checked') ? checkbox.removeAttr('checked') : checkbox.prop('checked', true)
+        checkbox.prop('checked') ? checkbox.removeAttr('checked') : checkbox.prop('checked', true);
     });
 
     // 切换密码登录
@@ -29,6 +29,6 @@ $(document).ready(function(){
         $(".tabs-item").first().addClass("tabs-active").siblings().removeClass("tabs-active");
         $(".login-panel .tabs-panel").eq(0).show().siblings(".tabs-panel").hide();
         $(".hot-line").css("left","0px");
-        $(".scan-tips, .normal-login, .scan-login").toggle()
+        $(".scan-tips, .normal-login, .scan-login").toggle();
     });
 });

@@ -45,7 +45,7 @@ class LoginController extends Controller
         $this->validate($request, [
             'username' => 'required|string|min:6|max:18',
             'password' => 'required|string|min:6|max:16',
-            'geetest_challenge' => 'geetest',
+            'geetest_challenge' => 'required|geetest',
         ], [
             'geetest' => config('geetest.server_fail_alert')
         ]);
