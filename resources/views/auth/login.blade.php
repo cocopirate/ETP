@@ -190,11 +190,13 @@
         /* Login Verification Button */
         .login-wrap .btn-verification{
             position: absolute;
+            text-align: center;
             top: 0px;
             right: 0px;;
             width: 90px;
             height: 38px;
             font-size: 14px;
+            cursor: pointer;
         }
 
         /* Verification Input */
@@ -284,6 +286,7 @@
                         <div class="tabs-panel tabs-panel-active login-password-panel">
                             <form method="POST" action="{{ route('login') }}">
                                 {{ csrf_field() }}
+
                                 <!-- 待优化，前端校验输入内容 -->
                                 <!-- 错误提示 -->
                                 @if (count($errors) > 0)
@@ -317,26 +320,57 @@
 
                         <!-- 手机动态登录 -->
                         <div class="tabs-panel login-mobile-panel">
-                            <form>
+                            <form method="POST" action="{{ route('sms.login') }}">
+                                {{ csrf_field() }}
+
+                                <!-- 待优化，前端校验输入内容 -->
+                                <!-- 错误提示 -->
+                                @if (count($errors) > 0)
+                                    <div class="tips-danger">
+                                        <img src="{{ URL::asset('fonts/icon_wrong.svg') }}" alt="">
+                                        <span>{{ $errors->first()}}</span>
+                                    </div>
+                                @endif
+                                <!-- END 错误提示 -->
+
+                                <!-- 消息反馈 -->
+                                @foreach (['error', 'warning', 'success', 'info'] as $msg)
+                                    @if (session()->has($msg))
+                                        <script>
+                                            $(function () {
+                                                $(".hot-line").css("left","145px");
+                                                $(".tabs-item").eq(1).addClass("tabs-active").siblings().removeClass("tabs-active");
+                                                $(".login-panel .tabs-panel").eq(1).show().siblings(".tabs-panel").hide();
+                                            })
+                                        </script>
+                                        <div class="tips-danger">
+                                            <img src="{{ URL::asset('fonts/icon_wrong.svg') }}" alt="">
+                                            <span>{{ session()->get($msg)}}</span>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                <!-- END 消息反馈 -->
+
                                 <div class="input-group">
                                     <span class="input-group-img"><img src="{{ URL::asset('fonts/icon_mobile.svg') }}"></span>
-                                    <input type="text" placeholder="手机号" />
+                                    <input id="mobile" name="mobile" type="tel" placeholder="手机号" />
                                 </div>
                                 {!! Geetest::render('float', 'mobile-verification') !!}
                                 <div class="verification-wrap">
                                     <div class="input-group verification-input">
                                         <span class="input-group-img"><img src="{{ URL::asset('fonts/icon_safe.svg') }}"></span>
-                                        <input type="text" placeholder="短信验证码" />
+                                        <input id="sms_code" name="sms_code" type="text" placeholder="短信验证码" />
+                                        <input id="sms_key" name="sms_key" type="hidden"/>
                                     </div>
-                                    <button class="btn btn-verification">短信验证</button>
+                                    <input id="sms_btn" type="button" class="btn btn-verification" value="短信验证" />
                                 </div>
                                 <div class="login-other-info">
                               <span class="checkbox-wrap">
-                                <input type="checkbox"/>
+                                <input type="checkbox" name="remember"/>
                                 <span class="checkbox-text">两周内自动登录</span>
                               </span>
                                 </div>
-                                <button class="btn btn-login">登&nbsp;录</button>
+                                <button type="submit" class="btn btn-login">登&nbsp;录</button>
                             </form>
                         </div>
                         <!-- END 手机动态登录-->
@@ -374,4 +408,110 @@
             </div>
         </div>
     </div>
+    <script>
+
+        // 显示错误信息
+        function showMsg(obj, msg) {
+            var dlgDiv = '<div class="tips-danger"><img src="{{ URL::asset('fonts/icon_wrong.svg') }}" alt=""><span>' + msg + '</span></div>';
+            $('.tips-danger').remove();
+            obj.prepend(dlgDiv);
+        }
+
+        // 获取对象第一个元素，用于前端错误表达
+        function getObjFirst(obj) {
+            for (let i in obj) return obj[i];
+        }
+
+        function sms_button(obj, time){
+            var i = setInterval(function(){
+                time--;
+                if(time >= 0){
+                    obj.attr('disabled',"disabled");
+                    obj.addClass('btn-disable');
+                    obj.val('重发短信(' + time + ')');
+                } else {
+                    obj.removeClass('btn-disable');
+                    obj.attr('disabled',false);
+                    obj.val('短信验证');
+                    clearInterval(i);
+                }
+            },1000);
+        }
+
+        $(function () {
+
+            // 检测发送验证码的按钮是否可用
+            var clickTime = localStorage.getItem('loginClickTime');
+            var nowTime = new Date().getTime();
+            var time = parseInt({{ Config::get('app.sms_limit_time')}}) - parseInt((nowTime - parseInt(clickTime)) / 1000);
+            if (time <= parseInt({{ Config::get('app.sms_limit_time')}}) && time > 0) {
+                sms_button($('#sms_btn'), time);
+            }
+
+            // 发送验证码点击事件
+            $('#sms_btn').click(function () {
+                var mobile = $('input[name="mobile"]').val();
+                var geetest_challenge = $('#mobile-verification input[name="geetest_challenge"]').val();
+                var geetest_validate = $('#mobile-verification input[name="geetest_validate"]').val();
+                var geetest_seccode = $('#mobile-verification input[name="geetest_seccode"]').val();
+
+                if (mobile) {
+                    var telReg = mobile.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+                    // 判断手机号格式是否正确
+                    if (telReg) {
+                        // 判断是否完成极验证
+                        if ( geetest_challenge && geetest_validate && geetest_seccode ) {
+                            $.ajax({
+                                url: '/geetest/validate',
+                                type: 'post',
+                                data: {
+                                    _token: '{{csrf_token()}}',
+                                    mobile: mobile,
+                                    'geetest_challenge': geetest_challenge,
+                                    'geetest_validate': geetest_validate,
+                                    'geetest_seccode': geetest_seccode,
+                                    'type': 'login',
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                    $('#sms_btn').attr('disabled',"disabled").addClass('btn-disable').val('重发短信(' + parseInt({{ Config::get('app.sms_limit_time')}}) + ')');
+                                    var clickTime = new Date().getTime();
+                                    // 记录用户点击发送验证码按钮的时间，防止页面刷新后按钮可以点击
+                                    localStorage.setItem('loginClickTime', clickTime.toString());
+                                    sms_button($('#sms_btn'), parseInt({{ Config::get('app.sms_limit_time')}}));
+
+                                    // ajax发送短信验证码
+                                    $.ajax({
+                                        method: 'POST',
+                                        url: '/sms/validate',
+                                        dataType: 'json',
+                                        data: {
+                                            '_token': '{{csrf_token()}}',
+                                            'geetest_key': data.geetest_key,
+                                        },
+                                        success: function (data) {
+                                            $('#sms_key').val(data.sms_key);
+                                        },
+                                        error: function(xhr){
+                                            showMsg($('form'), getObjFirst(xhr.responseJSON.errors)[0]);
+                                        }
+                                    });
+                                },
+                                error: function(xhr){
+                                showMsg($('form'), getObjFirst(xhr.responseJSON.errors)[0]);
+                                // 待优化，重写极验证；
+                            }
+                        });
+                        } else {
+                            showMsg($('form'), '验证码 未完成点击验证操作');
+                        }
+                    } else {
+                        showMsg($('form'), '手机号 格式错误');
+                    }
+                } else {
+                    showMsg($('form'), '手机号 不能为空');
+                }
+            });
+        });
+    </script>
 @endsection

@@ -159,6 +159,7 @@
                         </div>
                     @endif
                     <!-- END 错误提示 -->
+
                     <!-- 消息反馈 -->
                     @foreach (['error', 'warning', 'success', 'info'] as $msg)
                         @if (session()->has($msg))
@@ -226,7 +227,8 @@
         </div>
     </div>
     <script>
-        
+
+        // 显示错误信息
         function showMsg(obj, msg) {
             var dlgDiv = '<div class="tips-danger"><img src="{{ URL::asset('fonts/icon_wrong.svg') }}" alt=""><span>' + msg + '</span></div>';
             $('.tips-danger').remove();
@@ -256,7 +258,7 @@
 
         $(function () {
             // 检测发送验证码的按钮是否可用
-            var clickTime = localStorage.getItem('clickTime');
+            var clickTime = localStorage.getItem('registerClickTime');
             var nowTime = new Date().getTime();
             var time = parseInt({{ Config::get('app.sms_limit_time')}}) - parseInt((nowTime - parseInt(clickTime)) / 1000);
             if (time <= parseInt({{ Config::get('app.sms_limit_time')}}) && time > 0) {
@@ -286,14 +288,15 @@
                                     mobile: mobile,
                                     'geetest_challenge': geetest_challenge,
                                     'geetest_validate': geetest_validate,
-                                    'geetest_seccode': geetest_seccode
+                                    'geetest_seccode': geetest_seccode,
+                                    'type': 'register',
                                 },
                                 dataType: "json",
                                 success: function(data) {
                                     $('#sms_btn').attr('disabled',"disabled").addClass('btn-disable').val('重发验证码(' + parseInt({{ Config::get('app.sms_limit_time')}}) + ')');
                                     var clickTime = new Date().getTime();
                                     // 记录用户点击发送验证码按钮的时间，防止页面刷新后按钮可以点击
-                                    localStorage.setItem('clickTime', clickTime.toString());
+                                    localStorage.setItem('registerClickTime', clickTime.toString());
                                     sms_button($('#sms_btn'), parseInt({{ Config::get('app.sms_limit_time')}}));
 
                                     // ajax发送短信验证码

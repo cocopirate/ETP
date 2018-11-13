@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -77,5 +79,42 @@ class LoginController extends Controller
 
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath());
+    }
+
+    public function smsLogin(Request $request)
+    {
+        $this->validate($request, [
+            'mobile' => [
+                'required',
+                'regex:/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/'
+            ],
+            'sms_key' => 'required|string',
+            'sms_code' => 'required|string',
+        ], [
+            'sms_key.required' => '极验证码错误'
+        ]);
+
+        $smsData = Cache::get($request['sms_key']);
+
+        if (!$smsData) {
+            session()->flash('error', '短信验证码已失效');
+            return redirect()->back();
+        } else if (!hash_equals($smsData['mobile'], $request['mobile'])) {
+            session()->flash('error', '注册手机号与短信验证手机号不一致');
+            return redirect()->back();
+        } else if (!hash_equals($smsData['code'], $request['sms_code'])) {
+            session()->flash('error', '短信验证码错误');
+            return redirect()->back();
+        } else {
+            $user = User::where('mobile', $smsData['mobile'])->first();
+            // 清除验证码缓存
+            Cache::forget($request['sms_key']);
+            $remember = false;
+            if ($request->remember == 'on') {
+                $remember = true;
+            }
+            return $this->guard()->login($user, $remember)
+                ?: redirect()->intended($this->redirectPath());
+        }
     }
 }
