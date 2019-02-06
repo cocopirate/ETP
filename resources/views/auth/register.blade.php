@@ -13,7 +13,7 @@
         .reg-banner{
             width: 500px;
             height: 650px;
-            background: url('http://ov1pmduk7.bkt.clouddn.com/banner_registe.png') no-repeat;
+            background: url("{{ URL::asset('images/banner_register.png') }}") no-repeat;
         }
 
         /* Register Form*/

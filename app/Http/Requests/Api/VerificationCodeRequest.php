@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
-class SmsCodeRequest extends FormRequest
+class VerificationCodeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,29 +24,11 @@ class SmsCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => [
+            'phone' => [
                 'required',
                 'regex:/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/',
                 'unique:users'
             ],
-            /*
-            'geetest_challenge' => [
-                'required',
-                'geetest'
-            ],
-            */
-        ];
-    }
-
-    /**
-     * Get validation messages.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'geetest' => config('geetest.server_fail_alert')
         ];
     }
 }

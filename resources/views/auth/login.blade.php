@@ -7,7 +7,7 @@
         .login-adbg{
             width: 100%;
             height: 500px;
-            background: url("http://ov1pmduk7.bkt.clouddn.com/banner_login.png") no-repeat center center;
+            background: url("{{ URL::asset('images/banner_login.png') }}") no-repeat center center;
             background-size: cover;
         }
         .login-adlink{
